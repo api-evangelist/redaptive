@@ -1,0 +1,83 @@
+generated: '2026-08-05'
+method: derived
+source: well-known/redaptive-oauth-authorization-server.json
+note: >-
+  Derived entirely from the one anonymous machine-readable document Redaptive publishes — the
+  RFC 8414 Authorization Server Metadata for the Redaptive ONE Core API gateway. Redaptive
+  publishes no OpenAPI, no compliance page and no trust center, so nothing below is asserted
+  from marketing copy; every `conforms: true` cites a field observed in that document.
+standards:
+- id: oauth2
+  name: OAuth 2.0 (RFC 6749)
+  conforms: true
+  evidence: authorization_endpoint + token_endpoint + grant_types_supported [authorization_code, client_credentials, refresh_token]
+- id: rfc8414-as-metadata
+  name: OAuth 2.0 Authorization Server Metadata (RFC 8414)
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 application/json with issuer + endpoint set
+- id: rfc7636-pkce
+  name: Proof Key for Code Exchange (RFC 7636)
+  conforms: true
+  evidence: code_challenge_methods_supported [S256]
+- id: rfc8628-device-grant
+  name: OAuth 2.0 Device Authorization Grant (RFC 8628)
+  conforms: true
+  evidence: device_authorization_endpoint + grant urn:ietf:params:oauth:grant-type:device_code
+- id: rfc8693-token-exchange
+  name: OAuth 2.0 Token Exchange (RFC 8693)
+  conforms: true
+  evidence: grant_types_supported includes urn:ietf:params:oauth:grant-type:token-exchange
+- id: rfc8705-mtls
+  name: OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens (RFC 8705)
+  conforms: true
+  evidence: tls_client_auth + self_signed_tls_client_auth; tls_client_certificate_bound_access_tokens true
+- id: rfc7523-jwt-client-auth
+  name: JWT Profile for OAuth 2.0 Client Authentication (RFC 7523)
+  conforms: true
+  evidence: token_endpoint_auth_methods_supported includes private_key_jwt and client_secret_jwt
+- id: rfc7009-token-revocation
+  name: OAuth 2.0 Token Revocation (RFC 7009)
+  conforms: true
+  evidence: revocation_endpoint + revocation_endpoint_auth_methods_supported
+- id: rfc7662-token-introspection
+  name: OAuth 2.0 Token Introspection (RFC 7662)
+  conforms: true
+  evidence: introspection_endpoint + introspection_endpoint_auth_methods_supported
+- id: oidc-discovery
+  name: OpenID Connect Discovery 1.0
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 401 on every Redaptive host; no id_token in response_types_supported
+- id: rfc9728-protected-resource-metadata
+  name: OAuth 2.0 Protected Resource Metadata (RFC 9728)
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource returns 401
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence: no OpenAPI/Swagger document found on any API host, docs host or the SPA origin
+- id: rfc9457-problem-details
+  name: Problem Details for HTTP APIs (RFC 9457)
+  conforms: false
+  evidence: unauthenticated error bodies are text/plain "Unauthorized", not application/problem+json
+- id: rfc9116-security-txt
+  name: security.txt (RFC 9116)
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 or 401 on every Redaptive host
+- id: rfc8594-sunset-header
+  name: Sunset HTTP Header (RFC 8594)
+  conforms: false
+  evidence: no deprecation or sunset policy published
+compliance_program_published: false
+compliance_note: >-
+  No trust center, certification page or named audit (SOC 2, ISO 27001, PCI DSS, HIPAA,
+  FedRAMP) is published on any Redaptive host, so no `Compliance` pointer is emitted.
+x-evidence:
+- url: https://core.api.prod.redaptivegroup.com/.well-known/oauth-authorization-server
+  status: 200
+  fetched: '2026-08-05'
+- url: https://core.api.prod.redaptivegroup.com/.well-known/openid-configuration
+  status: 401
+  fetched: '2026-08-05'
+- url: https://core.api.prod.redaptivegroup.com/.well-known/oauth-protected-resource
+  status: 401
+  fetched: '2026-08-05'

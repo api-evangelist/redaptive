@@ -1,0 +1,82 @@
+generated: '2026-08-05'
+method: searched
+source: https://core.api.prod.redaptivegroup.com/.well-known/oauth-authorization-server
+docs: https://redaptive.com/data-solutions-terms-and-conditions/
+summary:
+  types: [oauth2, apiKey]
+  api_key_in: [header]
+  oauth2_flows: [authorizationCode, clientCredentials, deviceCode, tokenExchange, refreshToken]
+  public_reference: false
+  note: >-
+    Redaptive publishes no public API reference. The OAuth model below is read verbatim from
+    the RFC 8414 Authorization Server Metadata document the Redaptive ONE Core API gateway
+    serves anonymously. The API-key model is read from the published Data Solutions Terms and
+    Conditions, which define an "API Key" as "a digital credential issued by Redaptive that
+    enables access to and use of the API" — keys are issued by Redaptive to contracted
+    customers and may not be shared with third parties.
+schemes:
+- name: RedaptiveCoreOAuth2
+  type: oauth2
+  issuer: https://core-api.redaptiveinc.com
+  source: well-known/redaptive-oauth-authorization-server.json
+  implementation: Spring Authorization Server (inferred from /actuator/health + metadata shape)
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://core-api.redaptiveinc.com/oauth2/authorize
+    tokenUrl: https://core-api.redaptiveinc.com/oauth2/token
+    pkce: [S256]
+  - flow: clientCredentials
+    tokenUrl: https://core-api.redaptiveinc.com/oauth2/token
+  - flow: deviceCode
+    grant_type: urn:ietf:params:oauth:grant-type:device_code
+    deviceAuthorizationUrl: https://core-api.redaptiveinc.com/oauth2/device_authorization
+  - flow: tokenExchange
+    grant_type: urn:ietf:params:oauth:grant-type:token-exchange
+    tokenUrl: https://core-api.redaptiveinc.com/oauth2/token
+  - flow: refreshToken
+    tokenUrl: https://core-api.redaptiveinc.com/oauth2/token
+  endpoints:
+    jwks_uri: https://core-api.redaptiveinc.com/oauth2/jwks
+    revocation_endpoint: https://core-api.redaptiveinc.com/oauth2/revoke
+    introspection_endpoint: https://core-api.redaptiveinc.com/oauth2/introspect
+  client_authentication:
+  - client_secret_basic
+  - client_secret_post
+  - client_secret_jwt
+  - private_key_jwt
+  - tls_client_auth
+  - self_signed_tls_client_auth
+  sender_constrained_tokens:
+    tls_client_certificate_bound_access_tokens: true
+    spec: RFC 8705
+  response_types_supported: [code]
+  scopes_published: false
+  scopes_note: >-
+    The metadata document declares no scopes_supported and there is no public scope or
+    permission reference, so no scopes/ artifact is emitted rather than guess at one.
+- name: RedaptiveDataSolutionsAPIKey
+  type: apiKey
+  in: header
+  source: https://redaptive.com/data-solutions-terms-and-conditions/
+  issuance: Issued by Redaptive to contracted Data Solutions customers; sharing prohibited by contract.
+  parameter_name_published: false
+  note: >-
+    The terms name the credential but not the header it travels in; the header name is not
+    published anywhere public, so it is deliberately left unrecorded rather than invented.
+gaps:
+- No public authentication guide, token walkthrough, or API reference.
+- The declared issuer host core-api.redaptiveinc.com resolves but serves a TLS certificate
+  that does not match the hostname, so the metadata document's own issuer, jwks_uri, token,
+  introspection and revocation endpoints are not fetchable by an anonymous client.
+x-evidence:
+- url: https://core.api.prod.redaptivegroup.com/.well-known/oauth-authorization-server
+  status: 200
+  content_type: application/json
+  fetched: '2026-08-05'
+- url: https://core-api.redaptiveinc.com/oauth2/jwks
+  status: 0
+  error: TLS certificate subject name mismatch
+  fetched: '2026-08-05'
+- url: https://redaptive.com/data-solutions-terms-and-conditions/
+  status: 200
+  fetched: '2026-08-05'

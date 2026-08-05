@@ -1,0 +1,56 @@
+generated: '2026-08-05'
+method: probed
+source: probed the Redaptive corporate site, the Redaptive ONE application origin and the four
+  Redaptive ONE API hosts
+versioning:
+  scheme: uri-path
+  observed:
+  - api: Redaptive ONE Core API
+    version: v1
+    evidence: base path /api/core/v1 (from the Redaptive ONE production JavaScript bundle)
+  - api: Redaptive ONE Denali API
+    version: unversioned
+    evidence: base path /api/denali carries no version segment
+  policy_published: false
+  docs: null
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  note: No deprecation or versioning policy is published on any public Redaptive surface.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    The Platform Terms of Service and Data Solutions Terms and Conditions are public, but
+    neither publishes an uptime target or a service-level commitment.
+status_page:
+  url: https://status.redaptive.com/
+  provider: UptimeRobot
+  discovered_in: Redaptive ONE production JavaScript bundle (one.redaptive.com/assets/index-DAbJrxcw.js)
+  reachable: false
+  finding: >-
+    status.redaptive.com is a live DNS record (CNAME -> stats.uptimerobot.com) and plain HTTP
+    308-redirects to HTTPS, but the HTTPS handshake fails with a TLS internal-error alert
+    (alert 80) and no certificate is presented — the status page cannot be loaded by any
+    client. Because the page does not serve, no `StatusPage` pointer is wired into apis.yml;
+    crediting an unreachable status page would be false credit.
+  remedy: >-
+    Provision the certificate for the status.redaptive.com custom domain in UptimeRobot, then
+    link the status page from a public developer or support page.
+deprecated_operations: []
+x-evidence:
+- url: https://status.redaptive.com/
+  status: 0
+  error: 'TLS handshake failed: tlsv1 alert internal error (SSL alert 80), no peer certificate'
+  fetched: '2026-08-05'
+- url: http://status.redaptive.com/
+  status: 308
+  fetched: '2026-08-05'
+- url: https://core.api.prod.redaptivegroup.com/actuator/health
+  status: 200
+  body: '{"status":"UP","groups":["liveness","readiness"]}'
+  fetched: '2026-08-05'
+- url: https://denali-api.redaptive.com/actuator/health
+  status: 200
+  body: '{"status":"UP","groups":["liveness","readiness"]}'
+  fetched: '2026-08-05'

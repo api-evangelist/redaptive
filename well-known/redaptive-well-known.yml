@@ -1,0 +1,116 @@
+generated: '2026-08-05'
+method: searched
+source: probed /.well-known/* on every Redaptive host discovered in apis.yml and in the
+  Redaptive ONE production JavaScript bundle
+summary: >-
+  One anonymous discovery document was found across the whole Redaptive estate: an RFC 8414
+  OAuth 2.0 Authorization Server Metadata document served without credentials by the Redaptive
+  ONE Core API gateway. Every other /.well-known/ path on that host — including
+  /.well-known/openid-configuration and /.well-known/oauth-protected-resource — returns 401.
+  The marketing site returns WordPress 404s; one.redaptive.com is a single-page app whose
+  catch-all answers 200 with the SPA HTML shell for every path, so nothing there is a real hit.
+hosts:
+- host: https://core.api.prod.redaptivegroup.com
+  role: Redaptive ONE Core API gateway
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: redaptive-oauth-authorization-server.json
+    spec: RFC 8414
+  - path: /.well-known/oauth-protected-resource
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+- host: https://denali-api.redaptive.com
+  role: Redaptive ONE Denali API
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+- host: https://api.redaptiveinc.com
+  role: Redaptive ONE data-browser API
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://gc-api.redaptiveinc.com
+  role: Redaptive ONE GC API
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://redaptive.com
+  role: corporate website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    file: ../llms/redaptive-llms.txt
+- host: https://one.redaptive.com
+  role: Redaptive ONE web application (single-page app)
+  note: >-
+    SPA catch-all — every probed path returned HTTP 200 with the identical 3,759-byte
+    index.html shell, including /.well-known/agent-card.json, /openapi.json and /llms.txt.
+    None of these are real documents; recorded here so a later round does not re-credit them.
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    soft_404: true
+  - path: /.well-known/agent.json
+    status: 200
+    soft_404: true
+  - path: /.well-known/security.txt
+    status: 200
+    soft_404: true
+  - path: /openapi.json
+    status: 200
+    soft_404: true
+  - path: /llms.txt
+    status: 200
+    soft_404: true
+  - path: /robots.txt
+    status: 200
+    soft_404: false
+x-evidence:
+  fetched: '2026-08-05'
+  control_path_diff: >-
+    one.redaptive.com/<random> returns the same 3,759-byte HTML shell as
+    one.redaptive.com/.well-known/agent-card.json, so a 200 there is not evidence.

@@ -1,23 +1,140 @@
 aid: redaptive
 name: Redaptive
-description: 'Redaptive is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Redaptive is an energy infrastructure modernization company that funds, installs,
+  and measures energy-saving and energy-generating equipment across large multi-site commercial,
+  industrial, healthcare and real-estate portfolios under an Efficiency-as-a-Service and
+  Energy-as-a-Service model, so customers modernize lighting, HVAC, refrigeration, solar and EV
+  infrastructure without capital expenditure. Its Redaptive ONE platform meters electricity, gas
+  and water at the asset level and turns that telemetry into portfolio consumption, sustainability
+  benchmarking and ESG reporting. Redaptive contracts an API and an SDK to Data Solutions
+  customers under published terms, but the reference and specification are not public.'
 url: https://raw.githubusercontent.com/api-evangelist/redaptive/refs/heads/main/apis.yml
+image: https://redaptive.com/wp-content/uploads/2025/09/LI-Corp-Header-and-profile-2.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-05'
 modified: '2026-08-05'
 tags:
 - Company
-apis: []
+- Energy
+- Energy Efficiency
+- Energy as a Service
+- Sustainability
+- ESG Reporting
+- Metering
+- Buildings
+- Real Estate
+- Industrial
+- Climate Tech
+apis:
+- name: Redaptive ONE Core API
+  description: 'The core API gateway behind the Redaptive ONE platform, serving the account,
+    portfolio and building-insights surfaces of the ONE web application. Access is OAuth 2.0
+    protected: every path returns 401 to an anonymous client, but the gateway serves an RFC 8414
+    Authorization Server Metadata document without credentials, which is the only machine-readable
+    contract Redaptive publishes anonymously.'
+  humanURL: https://one.redaptive.com/
+  baseURL: https://core.api.prod.redaptivegroup.com/api/core/v1
+  tags:
+  - Energy
+  - Metering
+  - Portfolio
+  x-access: customer-only
+  x-evidence:
+    discovered_in: https://one.redaptive.com/assets/index-DAbJrxcw.js
+    probed: '2026-08-05'
+    anonymous_status: 401
+  properties:
+  - type: Authentication
+    url: authentication/redaptive-authentication.yml
+  - type: WellKnown
+    url: well-known/redaptive-well-known.yml
+- name: Redaptive ONE Denali API
+  description: 'The Denali service behind the Redaptive ONE platform, serving the metering,
+    consumption and sustainability-reporting surfaces of the ONE web application. OAuth 2.0
+    protected; anonymous requests to every path return 401.'
+  humanURL: https://one.redaptive.com/
+  baseURL: https://denali-api.redaptive.com/api/denali
+  tags:
+  - Energy
+  - Metering
+  - Sustainability
+  x-access: customer-only
+  x-evidence:
+    discovered_in: https://one.redaptive.com/assets/index-DAbJrxcw.js
+    probed: '2026-08-05'
+    anonymous_status: 401
+- name: Redaptive Data Solutions API
+  description: 'The API Redaptive licenses to Data Solutions customers, alongside an optional SDK,
+    for programmatic access to metered energy, gas and water usage data. Its existence, its API-key
+    credential model and its documentation are defined in the public Data Solutions Terms and
+    Conditions, but no reference, specification or developer portal is published.'
+  humanURL: https://redaptive.com/data-solutions-terms-and-conditions/
+  baseURL: https://api.redaptiveinc.com/api
+  tags:
+  - Energy
+  - Metering
+  - Data
+  x-access: customer-only
+  x-evidence:
+    discovered_in: https://one.redaptive.com/assets/index-DAbJrxcw.js
+    terms: https://redaptive.com/data-solutions-terms-and-conditions/
+    probed: '2026-08-05'
+    anonymous_status: 404
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/redaptive-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/redaptive_stock/
+  url: https://redaptive.com/
+- type: Blog
+  url: https://redaptive.com/blog/
+- type: Support
+  url: https://redaptive.my.site.com/Redaptivecustomersupport/s/cs
+- type: Login
+  url: https://one.redaptive.com/
+- type: TermsOfService
+  url: https://redaptive.com/platform-terms-of-service/
+- type: PrivacyPolicy
+  url: https://redaptive.com/privacy-policy/
+- type: GitHubOrganization
+  url: https://github.com/redaptiveinc
+- type: LLMsTxt
+  url: llms/redaptive-llms.txt
+- type: WellKnown
+  url: well-known/redaptive-well-known.yml
+- type: Authentication
+  url: authentication/redaptive-authentication.yml
+- type: Conformance
+  url: conformance/redaptive-conformance.yml
+- type: Lifecycle
+  url: lifecycle/redaptive-lifecycle.yml
+x-enrichment:
+  date: '2026-08-05'
+  status: minimal
+  artifacts_added: 7
+  pass: local-v1
+x-coverage:
+  state: gated
+  reason: customer-only-docs
+  detail: >-
+    Redaptive's own Data Solutions Terms and Conditions define an API, an SDK and developer
+    documentation that Redaptive "may make available from time to time" to contracted customers,
+    and all three production backends behind the Redaptive ONE app (core, denali, data-browser)
+    answer anonymous requests with a bare 401 or 404 — the only document reachable without a
+    Redaptive-issued API key is the OAuth authorization-server metadata at the core gateway.
+  evidence:
+  - url: https://core.api.prod.redaptivegroup.com/api/core/v1
+    status: 401
+  - url: https://denali-api.redaptive.com/api/denali
+    status: 401
+  - url: https://core.api.prod.redaptivegroup.com/.well-known/oauth-authorization-server
+    status: 200
+  - url: https://redaptive.com/data-solutions-terms-and-conditions/
+    status: 200
+  checked: '2026-08-05'
