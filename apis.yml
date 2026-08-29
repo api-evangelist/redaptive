@@ -9,6 +9,17 @@ description: 'Redaptive is an energy infrastructure modernization company that f
   benchmarking and ESG reporting. Redaptive contracts an API and an SDK to Data Solutions
   customers under published terms, but the reference and specification are not public.'
 url: https://raw.githubusercontent.com/api-evangelist/redaptive/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://redaptive.com/wp-content/uploads/2025/09/LI-Corp-Header-and-profile-2.png
 x-type: company
 x-source: harvest:secondary-market
