@@ -48,7 +48,7 @@ tags:
 - ESG Reporting
 - Metering
 - Buildings
-- Real-Estate
+- Real Estate
 - Industrial
 - Climate Tech
 tags_raw:
@@ -63,6 +63,7 @@ tags_raw:
 - Real Estate
 - Industrial
 - Climate Tech
+- Real-Estate
 apis:
 - name: Redaptive ONE Core API
   description: 'The core API gateway behind the Redaptive ONE platform, serving the account,
